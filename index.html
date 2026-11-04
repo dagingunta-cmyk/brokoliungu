@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#172c4c">
+<title>My Virtual iPhone</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont,
+    "Helvetica Neue", Arial, sans-serif;
+  background: #101827;
+  color: white;
+  min-height: 100vh;
+}
+
+/* WALLPAPER */
+.phone-screen {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  padding: 12px 22px 24px;
+  background:
+    radial-gradient(ellipse at 15% 30%, #7eabd4 0%, transparent 45%),
+    radial-gradient(ellipse at 90% 65%, #456e9d 0%, transparent 50%),
+    linear-gradient(145deg, #152a4a, #527ba4 55%, #182b4c);
+}
+
+/* STATUS BAR */
+.status {
+  height: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 5px;
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* DYNAMIC ISLAND */
+.island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 105px;
+  height: 29px;
+  background: #080a0d;
+  border-radius: 30px;
+  z-index: 5;
+}
+
+/* CLOCK WIDGET */
+.clock-widget {
+  margin-top: 48px;
+  margin-bottom: 35px;
+  text-align: center;
+}
+
+.clock {
+  font-size: clamp(58px, 16vw, 76px);
+  font-weight: 300;
+  letter-spacing: -3px;
+  line-height: 1.1;
+}
+
+.date {
+  font-size: 17px;
+  font-weight: 500;
+  margin-top: 5px;
+}
+
+/* APP GRID */
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px 10px;
+  margin-top: 10px;
+}
+
+.app {
+  border: none;
+  background: transparent;
+  color: white;
+  font: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-icon {
+  width: 57px;
+  height: 57px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 31px;
+  box-shadow: 0 4px 12px #07182d44;
+}
+
+.app-name {
+  font-size: 11px;
+  font-weight: 500;
+  text-shadow: 0 1px 4px #0008;
+}
+
+/* APP COLORS */
+.whatsapp { background: #20c76a; }
+.instagram {
+  background: linear-gradient(35deg,
+    #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+}
+.gallery {
+  background: #fff;
+  color: #e94b77;
+}
+.phone {
+  background: #28c76f;
+}
+.notes {
+  background: linear-gradient(#fff 0 28%, #f4e5a4 28% 100%);
+  color: #444;
+}
+.camera { background: #b7c2d0; }
+.calendar { background: white; color: #e64a4a; }
+.settings { background: #929ba5; }
+.safari { background: #e9f6ff; color: #1685e9; }
+.messages { background: #20c76a; }
+.music { background: #f9d5df; color: #e83e78; }
+.mail { background: #e8f4ff; color: #2588e9; }
+
+/* SEARCH BAR */
+.search-bar {
+  width: 175px;
+  margin: 30px auto 22px;
+  padding: 9px;
+  border-radius: 20px;
+  background: #ffffff35;
+  backdrop-filter: blur(15px);
+  text-align: center;
+  font-size: 12px;
+  color: white;
+}
+
+/* DOCK */
+.dock {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 13px 10px;
+  border-radius: 26px;
+  background: #ffffff30;
+  backdrop-filter: blur(20px);
+  margin-top: 5px;
+}
+
+.dock .app-name {
+  display: none;
+}
+
+.dock .app-icon {
+  width: 54px;
+  height: 54px;
+}
+
+/* HOME INDICATOR */
+.home-indicator {
+  width: 110px;
+  height: 5px;
+  background: white;
+  border-radius: 10px;
+  margin: 25px auto 0;
+}
+
+/* APPLICATION PAGE */
+.app-page {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: #f4f5f9;
+  color: #222;
+  display: none;
+  padding: 55px 20px 35px;
+}
+
+.app-page.active {
+  display: block;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 35px;
+}
+
+.back-button {
+  border: none;
+  background: #e5e9f0;
+  color: #2879d9;
+  padding: 9px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.app-content {
+  text-align: center;
+  margin-top: 70px;
+}
+
+.app-content .big-icon {
+  font-size: 65px;
+  margin-bottom: 15px;
+}
+
+.app-content h2 {
+  font-size: 23px;
+  margin-bottom: 10px;
+}
+
+.app-content p {
+  font-size: 14px;
+  color: #777;
+  line-height: 1.6;
+}
+
+/* RESPONSIVE */
+@media (min-width: 600px) {
+  .phone-screen {
+    width: 390px;
+    min-height: 844px;
+    margin: 25px auto;
+    border: 5px solid #222;
+    border-radius: 42px;
+    box-shadow: 0 15px 50px #0007;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="phone-screen">
+
+  <div class="island"></div>
+
+  <div class="status">
+    <span id="statusTime">9:41</span>
+
+    <div class="status-right">
+      <span>●●●</span>
+      <span>Wi-Fi</span>
+      <span>▰</span>
+    </div>
+  </div>
+
+  <div class="clock-widget">
+    <div class="clock" id="clock">09:41</div>
+    <div class="date" id="date">Wednesday, November 4</div>
+  </div>
+
+  <div class="app-grid" id="appGrid"></div>
+
+  <div class="search-bar">⌕ &nbsp; Search</div>
+
+  <div class="dock" id="dock"></div>
+
+  <div class="home-indicator"></div>
+
+  <!-- APPLICATION PAGE -->
+  <div class="app-page" id="appPage">
+
+    <div class="app-header">
+      <button class="back-button" onclick="goHome()">
+        ‹ Home
+      </button>
+      <span id="pageTitle">Application</span>
+    </div>
+
+    <div class="app-content">
+      <div class="big-icon" id="pageIcon">📱</div>
+      <h2 id="pageName">Application</h2>
+      <p id="pageDescription">
+        Your application will appear here.
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+/* APPLICATION DATA */
+const apps = [
+  { name: "WhatsApp", icon: "☘️", color: "whatsapp" },
+  { name: "Instagram", icon: "◎", color: "instagram" },
+  { name: "Gallery", icon: "🌸", color: "gallery" },
+  { name: "Phone", icon: "☎", color: "phone" },
+  { name: "Notes", icon: "📝", color: "notes" },
+  { name: "Camera", icon: "📷", color: "camera" },
+  { name: "Calendar", icon: "4", color: "calendar" },
+  { name: "Settings", icon: "⚙", color: "settings" },
+  { name: "Safari", icon: "🧭", color: "safari" },
+  { name: "Messages", icon: "💬", color: "messages" },
+  { name: "Music", icon: "♫", color: "music" },
+  { name: "Mail", icon: "✉", color: "mail" }
+];
+
+const descriptions = {
+  WhatsApp: "Your conversations and messages will be displayed here.",
+  Instagram: "Explore posts, stories, profiles and comments.",
+  Gallery: "Your photos and memories will be displayed here.",
+  Phone: "Your recent calls and contacts will appear here.",
+  Notes: "Your personal notes and secrets will appear here.",
+  Camera: "Your camera interface will appear here.",
+  Calendar: "Your upcoming events will appear here.",
+  Settings: "Customize your virtual iPhone.",
+  Safari: "Your browser will appear here.",
+  Messages: "Your text messages will appear here.",
+  Music: "Your favorite music will appear here.",
+  Mail: "Your emails will appear here."
+};
+
+/* CREATE APP ICON */
+function createApp(app) {
+  return `
+    <button class="app" onclick="openApp('${app.name}')">
+      <div class="app-icon ${app.color}">
+        ${app.icon}
+      </div>
+      <span class="app-name">${app.name}</span>
+    </button>
+  `;
+}
+
+/* DISPLAY APPLICATIONS */
+document.getElementById("appGrid").innerHTML =
+  apps.map(createApp).join("");
+
+const dockApps = [
+  apps[3], // Phone
+  apps[0], // WhatsApp
+  apps[8], // Safari
+  apps[9]  // Messages
+];
+
+document.getElementById("dock").innerHTML =
+  dockApps.map(createApp).join("");
+
+/* OPEN APP */
+function openApp(name) {
+  const app = apps.find(item => item.name === name);
+
+  document.getElementById("pageTitle").textContent = name;
+  document.getElementById("pageName").textContent = name;
+  document.getElementById("pageIcon").textContent = app.icon;
+  document.getElementById("pageDescription").textContent =
+    descriptions[name];
+
+  document.getElementById("appPage").classList.add("active");
+}
+
+/* BACK TO HOME */
+function goHome() {
+  document.getElementById("appPage").classList.remove("active");
+}
+
+/* LIVE CLOCK */
+function updateClock() {
+  const now = new Date();
+
+  const time = now.toLocaleTimeString("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+
+  const date = now.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric"
+  });
+
+  document.getElementById("clock").textContent = time;
+  document.getElementById("statusTime").textContent = time;
+  document.getElementById("date").textContent = date;
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+
+</script>
+
+</body>
+  </html>
+  
