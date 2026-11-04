@@ -15,57 +15,197 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont,
-    "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
   background: #101827;
   color: white;
   min-height: 100vh;
 }
 
-/* WALLPAPER */
 .phone-screen {
-  min-height: 100vh;
   width: 100%;
+  min-height: 100vh;
   position: relative;
   overflow: hidden;
-  padding: 12px 22px 24px;
   background:
     radial-gradient(ellipse at 15% 30%, #7eabd4 0%, transparent 45%),
     radial-gradient(ellipse at 90% 65%, #456e9d 0%, transparent 50%),
     linear-gradient(145deg, #152a4a, #527ba4 55%, #182b4c);
+  background-size: cover;
+  background-position: center;
+  transition: background .3s;
 }
 
-/* STATUS BAR */
 .status {
-  height: 35px;
+  height: 42px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 25px;
   font-size: 14px;
   font-weight: 600;
-  padding: 0 5px;
+  position: relative;
+  z-index: 2;
 }
 
 .status-right {
   display: flex;
-  align-items: center;
-  gap: 7px;
+  gap: 8px;
 }
 
-/* DYNAMIC ISLAND */
 .island {
   position: absolute;
-  top: 10px;
+  top: 9px;
   left: 50%;
   transform: translateX(-50%);
   width: 105px;
   height: 29px;
-  background: #080a0d;
   border-radius: 30px;
+  background: #080a0d;
   z-index: 5;
 }
 
-/* CLOCK WIDGET */
+.lock-screen,
+.passcode-screen,
+.home-screen {
+  min-height: 100vh;
+  padding: 12px 22px 24px;
+  position: relative;
+}
+
+.lock-screen {
+  text-align: center;
+}
+
+.lock-clock {
+  margin-top: 95px;
+  font-size: clamp(65px, 18vw, 88px);
+  font-weight: 300;
+  letter-spacing: -4px;
+}
+
+.lock-date {
+  font-size: 17px;
+  margin-top: 3px;
+}
+
+.lock-message {
+  margin-top: 35px;
+  font-size: 13px;
+  color: #ffffffcc;
+}
+
+.unlock-button {
+  position: absolute;
+  bottom: 95px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid #ffffff88;
+  color: white;
+  background: #ffffff25;
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-size: 14px;
+  backdrop-filter: blur(15px);
+}
+
+.lock-bottom {
+  position: absolute;
+  bottom: 28px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.lock-bottom span {
+  background: #ffffff30;
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.home-indicator {
+  position: absolute;
+  bottom: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 5px;
+  border-radius: 10px;
+  background: white;
+  z-index: 20;
+}
+
+.passcode-screen {
+  text-align: center;
+  padding-top: 105px;
+}
+
+.passcode-screen h2 {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.passcode-screen p {
+  margin-top: 10px;
+  color: #ffffffbb;
+  font-size: 13px;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 17px;
+  margin: 30px 0;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border: 1px solid white;
+  border-radius: 50%;
+}
+
+.dot.filled {
+  background: white;
+}
+
+.keypad {
+  width: 260px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.key {
+  border: none;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #ffffff32;
+  color: white;
+  font-size: 25px;
+  margin: auto;
+}
+
+.key:active {
+  background: #ffffff70;
+}
+
+.error {
+  color: #ffd0d0;
+  font-size: 13px;
+  min-height: 20px;
+}
+
+.home-screen {
+  display: none;
+}
+
 .clock-widget {
   margin-top: 48px;
   margin-bottom: 35px;
@@ -76,16 +216,13 @@ body {
   font-size: clamp(58px, 16vw, 76px);
   font-weight: 300;
   letter-spacing: -3px;
-  line-height: 1.1;
 }
 
 .date {
   font-size: 17px;
-  font-weight: 500;
   margin-top: 5px;
 }
 
-/* APP GRID */
 .app-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -103,7 +240,6 @@ body {
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .app-icon {
@@ -112,7 +248,7 @@ body {
   border-radius: 14px;
   display: grid;
   place-items: center;
-  font-size: 31px;
+  font-size: 30px;
   box-shadow: 0 4px 12px #07182d44;
 }
 
@@ -122,21 +258,14 @@ body {
   text-shadow: 0 1px 4px #0008;
 }
 
-/* APP COLORS */
 .whatsapp { background: #20c76a; }
 .instagram {
-  background: linear-gradient(35deg,
-    #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+  background: linear-gradient(35deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
 }
-.gallery {
-  background: #fff;
-  color: #e94b77;
-}
-.phone {
-  background: #28c76f;
-}
+.gallery { background: white; color: #e94b77; }
+.phone { background: #28c76f; }
 .notes {
-  background: linear-gradient(#fff 0 28%, #f4e5a4 28% 100%);
+  background: linear-gradient(#fff 0 28%,#f4e5a4 28% 100%);
   color: #444;
 }
 .camera { background: #b7c2d0; }
@@ -147,20 +276,16 @@ body {
 .music { background: #f9d5df; color: #e83e78; }
 .mail { background: #e8f4ff; color: #2588e9; }
 
-/* SEARCH BAR */
 .search-bar {
   width: 175px;
   margin: 30px auto 22px;
   padding: 9px;
   border-radius: 20px;
   background: #ffffff35;
-  backdrop-filter: blur(15px);
   text-align: center;
   font-size: 12px;
-  color: white;
 }
 
-/* DOCK */
 .dock {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -181,16 +306,6 @@ body {
   height: 54px;
 }
 
-/* HOME INDICATOR */
-.home-indicator {
-  width: 110px;
-  height: 5px;
-  background: white;
-  border-radius: 10px;
-  margin: 25px auto 0;
-}
-
-/* APPLICATION PAGE */
 .app-page {
   position: absolute;
   inset: 0;
@@ -198,7 +313,8 @@ body {
   background: #f4f5f9;
   color: #222;
   display: none;
-  padding: 55px 20px 35px;
+  padding: 55px 18px 45px;
+  overflow-y: auto;
 }
 
 .app-page.active {
@@ -209,9 +325,9 @@ body {
   display: flex;
   align-items: center;
   gap: 15px;
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 700;
-  margin-bottom: 35px;
+  margin-bottom: 25px;
 }
 
 .back-button {
@@ -223,28 +339,104 @@ body {
   font-size: 14px;
 }
 
-.app-content {
+.gallery-tools {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.upload-button,
+.action-button {
+  border: none;
+  background: #2585e9;
+  color: white;
+  padding: 12px 15px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.gallery-photo {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: #dce5ee;
+  border-radius: 3px;
+}
+
+.empty-gallery {
+  grid-column: 1 / -1;
   text-align: center;
-  margin-top: 70px;
+  color: #888;
+  padding: 65px 15px;
+  line-height: 1.8;
 }
 
-.app-content .big-icon {
-  font-size: 65px;
-  margin-bottom: 15px;
+.photo-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: #111;
+  color: white;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-.app-content h2 {
-  font-size: 23px;
+.photo-viewer img {
+  max-width: 100%;
+  max-height: 65vh;
+  object-fit: contain;
+}
+
+.viewer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.viewer-close {
+  background: #ffffff25;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 12px;
+}
+
+.settings-content,
+.placeholder-content {
+  text-align: center;
+  padding-top: 45px;
+  color: #777;
+  line-height: 1.8;
+}
+
+.settings-content h3 {
+  color: #222;
   margin-bottom: 10px;
 }
 
-.app-content p {
+.setting-button {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: #e5edf8;
+  color: #2679d4;
   font-size: 14px;
-  color: #777;
-  line-height: 1.6;
 }
 
-/* RESPONSIVE */
 @media (min-width: 600px) {
   .phone-screen {
     width: 390px;
@@ -260,13 +452,12 @@ body {
 
 <body>
 
-<div class="phone-screen">
+<div class="phone-screen" id="phone">
 
   <div class="island"></div>
 
   <div class="status">
-    <span id="statusTime">9:41</span>
-
+    <span id="statusTime">09:41</span>
     <div class="status-right">
       <span>●●●</span>
       <span>Wi-Fi</span>
@@ -274,144 +465,440 @@ body {
     </div>
   </div>
 
-  <div class="clock-widget">
-    <div class="clock" id="clock">09:41</div>
-    <div class="date" id="date">Wednesday, November 4</div>
-  </div>
+  <!-- LOCK SCREEN -->
+  <section class="lock-screen" id="lockScreen">
+    <div class="lock-clock" id="lockClock">09:41</div>
+    <div class="lock-date" id="lockDate"></div>
+    <div class="lock-message">A beautiful day begins with you.</div>
 
-  <div class="app-grid" id="appGrid"></div>
+    <button class="unlock-button" onclick="showPasscode()">
+      Tap to Unlock
+    </button>
 
-  <div class="search-bar">⌕ &nbsp; Search</div>
+    <div class="lock-bottom">
+      <span>🔦</span>
+      <span>📷</span>
+    </div>
+  </section>
 
-  <div class="dock" id="dock"></div>
+  <!-- PASSCODE -->
+  <section class="passcode-screen" id="passcodeScreen" style="display:none">
+    <h2>Enter Passcode</h2>
+    <p>Enter your passcode to unlock this iPhone</p>
+
+    <div class="dots" id="dots">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+
+    <div class="error" id="passcodeError"></div>
+
+    <div class="keypad">
+      <button class="key" onclick="pressKey('1')">1</button>
+      <button class="key" onclick="pressKey('2')">2</button>
+      <button class="key" onclick="pressKey('3')">3</button>
+      <button class="key" onclick="pressKey('4')">4</button>
+      <button class="key" onclick="pressKey('5')">5</button>
+      <button class="key" onclick="pressKey('6')">6</button>
+      <button class="key" onclick="pressKey('7')">7</button>
+      <button class="key" onclick="pressKey('8')">8</button>
+      <button class="key" onclick="pressKey('9')">9</button>
+      <button class="key" onclick="clearPasscode()">⌫</button>
+      <button class="key" onclick="pressKey('0')">0</button>
+      <button class="key" onclick="cancelPasscode()">×</button>
+    </div>
+  </section>
+
+  <!-- HOME SCREEN -->
+  <section class="home-screen" id="homeScreen">
+
+    <div class="clock-widget">
+      <div class="clock" id="homeClock">09:41</div>
+      <div class="date" id="homeDate"></div>
+    </div>
+
+    <div class="app-grid" id="appGrid"></div>
+
+    <div class="search-bar">⌕ &nbsp; Search</div>
+
+    <div class="dock" id="dock"></div>
+  </section>
+
+  <!-- APP PAGE -->
+  <section class="app-page" id="appPage">
+    <div class="app-header">
+      <button class="back-button" onclick="goHome()">‹ Home</button>
+      <span id="pageTitle">Application</span>
+    </div>
+    <div id="appContent"></div>
+  </section>
 
   <div class="home-indicator"></div>
 
-  <!-- APPLICATION PAGE -->
-  <div class="app-page" id="appPage">
+</div>
 
-    <div class="app-header">
-      <button class="back-button" onclick="goHome()">
-        ‹ Home
-      </button>
-      <span id="pageTitle">Application</span>
-    </div>
-
-    <div class="app-content">
-      <div class="big-icon" id="pageIcon">📱</div>
-      <h2 id="pageName">Application</h2>
-      <p id="pageDescription">
-        Your application will appear here.
-      </p>
-    </div>
-
+<!-- PHOTO VIEWER -->
+<div class="photo-viewer" id="photoViewer">
+  <img id="viewerImage" alt="Selected photo">
+  <div class="viewer-actions">
+    <button class="action-button" onclick="setWallpaper()">
+      Set as Wallpaper
+    </button>
+    <button class="viewer-close" onclick="closeViewer()">
+      Close
+    </button>
   </div>
-
 </div>
 
 <script>
+/* CONFIGURATION */
+const CORRECT_PASSCODE = "2610";
 
-/* APPLICATION DATA */
 const apps = [
-  { name: "WhatsApp", icon: "☘️", color: "whatsapp" },
-  { name: "Instagram", icon: "◎", color: "instagram" },
-  { name: "Gallery", icon: "🌸", color: "gallery" },
-  { name: "Phone", icon: "☎", color: "phone" },
-  { name: "Notes", icon: "📝", color: "notes" },
-  { name: "Camera", icon: "📷", color: "camera" },
-  { name: "Calendar", icon: "4", color: "calendar" },
-  { name: "Settings", icon: "⚙", color: "settings" },
-  { name: "Safari", icon: "🧭", color: "safari" },
-  { name: "Messages", icon: "💬", color: "messages" },
-  { name: "Music", icon: "♫", color: "music" },
-  { name: "Mail", icon: "✉", color: "mail" }
+  
+  {name:"Instagram",icon:"◎",color:"instagram"},
+  {name:"Gallery",icon:"🌸",color:"gallery"},
+  {name:"Phone",icon:"☎",color:"phone"},
+  {name:"Notes",icon:"📝",color:"notes"},
+  {name:"Camera",icon:"📷",color:"camera"},
+  {name:"Calendar",icon:"4",color:"calendar"},
+  {name:"Settings",icon:"⚙",color:"settings"},
+  {name:"Safari",icon:"🧭",color:"safari"},
+  {name:"Messages",icon:"💬",color:"messages"},
+  {name:"Music",icon:"♫",color:"music"},
+  {name:"Mail",icon:"✉",color:"mail"}
 ];
 
-const descriptions = {
-  WhatsApp: "Your conversations and messages will be displayed here.",
-  Instagram: "Explore posts, stories, profiles and comments.",
-  Gallery: "Your photos and memories will be displayed here.",
-  Phone: "Your recent calls and contacts will appear here.",
-  Notes: "Your personal notes and secrets will appear here.",
-  Camera: "Your camera interface will appear here.",
-  Calendar: "Your upcoming events will appear here.",
-  Settings: "Customize your virtual iPhone.",
-  Safari: "Your browser will appear here.",
-  Messages: "Your text messages will appear here.",
-  Music: "Your favorite music will appear here.",
-  Mail: "Your emails will appear here."
-};
+let enteredCode = "";
+let photos = [];
+let selectedPhoto = null;
 
-/* CREATE APP ICON */
-function createApp(app) {
-  return `
-    <button class="app" onclick="openApp('${app.name}')">
-      <div class="app-icon ${app.color}">
-        ${app.icon}
-      </div>
-      <span class="app-name">${app.name}</span>
-    </button>
-  `;
+/* DATABASE: STORE PHOTOS AND WALLPAPER */
+let db;
+
+function openDatabase() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("VirtualIphoneDB", 1);
+
+    request.onupgradeneeded = function(event) {
+      const database = event.target.result;
+
+      if (!database.objectStoreNames.contains("photos")) {
+        database.createObjectStore("photos", {keyPath:"id"});
+      }
+
+      if (!database.objectStoreNames.contains("settings")) {
+        database.createObjectStore("settings", {keyPath:"key"});
+      }
+    };
+
+    request.onsuccess = function(event) {
+      db = event.target.result;
+      resolve(db);
+    };
+
+    request.onerror = function() {
+      reject(request.error);
+    };
+  });
 }
 
-/* DISPLAY APPLICATIONS */
-document.getElementById("appGrid").innerHTML =
-  apps.map(createApp).join("");
-
-const dockApps = [
-  apps[3], // Phone
-  apps[0], // WhatsApp
-  apps[8], // Safari
-  apps[9]  // Messages
-];
-
-document.getElementById("dock").innerHTML =
-  dockApps.map(createApp).join("");
-
-/* OPEN APP */
-function openApp(name) {
-  const app = apps.find(item => item.name === name);
-
-  document.getElementById("pageTitle").textContent = name;
-  document.getElementById("pageName").textContent = name;
-  document.getElementById("pageIcon").textContent = app.icon;
-  document.getElementById("pageDescription").textContent =
-    descriptions[name];
-
-  document.getElementById("appPage").classList.add("active");
+function savePhoto(photo) {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction("photos", "readwrite");
+    transaction.objectStore("photos").put(photo);
+    transaction.oncomplete = resolve;
+    transaction.onerror = () => reject(transaction.error);
+  });
 }
 
-/* BACK TO HOME */
-function goHome() {
-  document.getElementById("appPage").classList.remove("active");
+function getPhotos() {
+  return new Promise((resolve, reject) => {
+    const request = db.transaction("photos")
+      .objectStore("photos").getAll();
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
 }
 
-/* LIVE CLOCK */
+function saveSetting(key, value) {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction("settings", "readwrite");
+    transaction.objectStore("settings").put({key, value});
+    transaction.oncomplete = resolve;
+    transaction.onerror = () => reject(transaction.error);
+  });
+}
+
+function getSetting(key) {
+  return new Promise((resolve, reject) => {
+    const request = db.transaction("settings")
+      .objectStore("settings").get(key);
+
+    request.onsuccess = () => resolve(request.result?.value || null);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+/* CLOCK */
 function updateClock() {
   const now = new Date();
 
   const time = now.toLocaleTimeString("id-ID", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
+    hour:"2-digit",
+    minute:"2-digit",
+    hour12:false
   });
 
   const date = now.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric"
+    weekday:"long",
+    month:"long",
+    day:"numeric"
   });
 
-  document.getElementById("clock").textContent = time;
   document.getElementById("statusTime").textContent = time;
-  document.getElementById("date").textContent = date;
+  document.getElementById("lockClock").textContent = time;
+  document.getElementById("homeClock").textContent = time;
+  document.getElementById("lockDate").textContent = date;
+  document.getElementById("homeDate").textContent = date;
 }
 
 updateClock();
 setInterval(updateClock, 1000);
 
+/* PASSCODE */
+function showPasscode() {
+  document.getElementById("lockScreen").style.display = "none";
+  document.getElementById("passcodeScreen").style.display = "block";
+  enteredCode = "";
+  updateDots();
+}
+
+function cancelPasscode() {
+  document.getElementById("passcodeScreen").style.display = "none";
+  document.getElementById("lockScreen").style.display = "block";
+  enteredCode = "";
+  updateDots();
+}
+
+function pressKey(number) {
+  if (enteredCode.length >= 4) return;
+
+  enteredCode += number;
+  updateDots();
+
+  if (enteredCode.length === 4) {
+    if (enteredCode === CORRECT_PASSCODE) {
+      document.getElementById("passcodeScreen").style.display = "none";
+      document.getElementById("homeScreen").style.display = "block";
+      document.getElementById("passcodeError").textContent = "";
+    } else {
+      document.getElementById("passcodeError").textContent = "Incorrect passcode";
+      setTimeout(() => {
+        enteredCode = "";
+        updateDots();
+        document.getElementById("passcodeError").textContent = "";
+      }, 700);
+    }
+  }
+}
+
+function clearPasscode() {
+  enteredCode = enteredCode.slice(0, -1);
+  updateDots();
+}
+
+function updateDots() {
+  document.querySelectorAll(".dot").forEach((dot, index) => {
+    dot.classList.toggle("filled", index < enteredCode.length);
+  });
+}
+
+/* APPLICATION ICONS */
+function createApp(app) {
+  return `
+    <button class="app" onclick="openApp('${app.name}')">
+      <div class="app-icon ${app.color}">${app.icon}</div>
+      <span class="app-name">${app.name}</span>
+    </button>
+  `;
+}
+
+document.getElementById("appGrid").innerHTML =
+  apps.map(createApp).join("");
+
+const dockApps = [apps[3], apps[0], apps[8], apps[9]];
+
+document.getElementById("dock").innerHTML =
+  dockApps.map(createApp).join("");
+
+/* OPEN APPLICATION */
+function openApp(name) {
+  document.getElementById("pageTitle").textContent = name;
+
+  const content = document.getElementById("appContent");
+
+  if (name === "Gallery") {
+    renderGallery();
+  } else if (name === "Settings") {
+    content.innerHTML = `
+      <div class="settings-content">
+        <h3>Settings</h3>
+        <p>Customize your virtual iPhone.</p>
+        <button class="setting-button" onclick="goHome()">
+          Back to Home Screen
+        </button>
+        <p style="margin-top:25px;font-size:12px">
+          Virtual iPhone · iOS-inspired simulation
+        </p>
+      </div>
+    `;
+  } else {
+    const app = apps.find(item => item.name === name);
+
+    content.innerHTML = `
+      <div class="placeholder-content">
+        <div style="font-size:65px">${app.icon}</div>
+        <h2 style="color:#333;margin:12px">${name}</h2>
+        <p>This application is part of your virtual iPhone.</p>
+      </div>
+    `;
+  }
+
+  document.getElementById("appPage").classList.add("active");
+}
+
+/* BACK HOME */
+function goHome() {
+  document.getElementById("appPage").classList.remove("active");
+  closeViewer();
+}
+
+/* GALLERY */
+function renderGallery() {
+  const content = document.getElementById("appContent");
+
+  content.innerHTML = `
+    <div class="gallery-tools">
+      <label class="upload-button">
+        + Add Photos
+        <input type="file" id="photoUpload" accept="image/*" multiple hidden
+          onchange="uploadPhotos(event)">
+      </label>
+    </div>
+
+    <div class="gallery-grid" id="galleryGrid"></div>
+  `;
+
+  drawPhotos();
+}
+
+function drawPhotos() {
+  const grid = document.getElementById("galleryGrid");
+  if (!grid) return;
+
+  if (photos.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-gallery">
+        <div style="font-size:45px">🌸</div>
+        <strong>No Photos Yet</strong>
+        <p>Your memories will appear here.</p>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = photos.map((photo, index) => `
+    <img
+      class="gallery-photo"
+      src="${photo.data}"
+      alt="Photo ${index + 1}"
+      onclick="openPhoto(${index})">
+  `).join("");
+}
+
+async function uploadPhotos(event) {
+  const files = Array.from(event.target.files || []);
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) continue;
+
+    const data = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+    const photo = {
+      id: Date.now() + Math.random(),
+      name: file.name,
+      data
+    };
+
+    await savePhoto(photo);
+    photos.push(photo);
+  }
+
+  drawPhotos();
+  event.target.value = "";
+}
+
+/* OPEN PHOTO */
+function openPhoto(index) {
+  selectedPhoto = photos[index];
+
+  document.getElementById("viewerImage").src = selectedPhoto.data;
+  document.getElementById("photoViewer").style.display = "flex";
+}
+
+function closeViewer() {
+  document.getElementById("photoViewer").style.display = "none";
+}
+
+/* SET WALLPAPER */
+async function setWallpaper() {
+  if (!selectedPhoto) return;
+
+  try {
+    await saveSetting("wallpaper", selectedPhoto.data);
+
+    document.getElementById("phone").style.backgroundImage =
+      `url("${selectedPhoto.data}")`;
+
+    closeViewer();
+    alert("Wallpaper berhasil dipasang!");
+  } catch (error) {
+    alert("Wallpaper gagal disimpan. Coba pilih foto yang ukurannya lebih kecil.");
+  }
+}
+
+/* INITIALIZE */
+async function initialize() {
+  try {
+    await openDatabase();
+
+    photos = await getPhotos();
+
+    const wallpaper = await getSetting("wallpaper");
+
+    if (wallpaper) {
+      document.getElementById("phone").style.backgroundImage =
+        `url("${wallpaper}")`;
+    }
+  } catch (error) {
+    console.error("Database error:", error);
+  }
+}
+
+initialize();
 </script>
 
 </body>
   </html>
-  
+
+
+    
