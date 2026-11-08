@@ -520,81 +520,35 @@ function renderMessages(){
       <div class="messages-top">
         <h2>Messages</h2>
         <button class="new-chat" onclick="addContact()">+</button>
-      </div>
-      <button class="contact-add" onclick="addContact()">＋ New Message / Add Contact</button>
-      <div id="contactList"></div>
-    </div>`;
-  const list=document.getElementById("contactList");
-  if(!messageContacts.length){
-    list.innerHTML=`<div class="chat-empty">
-      <div style="font-size:45px">💬</div>
-      Your messages will appear here.
-      <p style="margin-top:8px">Tap + to add a contact.</p>
-    </div>`;
-    return;
-  }
-  list.innerHTML=messageContacts.map(contact=>{
-    const last=contact.messages[contact.messages.length-1];
-    return `<div class="contact-row" onclick="openConversation('${contact.id}')">
-      <div class="contact-avatar">
-        ${contact.photo?`<img src="${contact.photo}" alt="">`:escapeMessageText(contact.name.charAt(0).toUpperCase())}
-      </div>
-      <div class="contact-info">
-        <strong>${escapeMessageText(contact.name)}</strong>
-        <small>${last?escapeMessageText(last.text):"iMessage"}</small>
-      </div>
-    </div>`;
-  }).join("");
+      div class="chat-tools"><button id="replyButton">＋ Add Reply</button><button id="editPhotoButton">Edit Photo</button></div><button class="delete-button" id="deleteChatButton">Delete Conversation</button></div>`;
+ $("messagesBack").addEventListener("click",renderMessages);
+ $("chatForm").addEventListener("submit",sendMessage);
+ $("replyButton").addEventListener("click",addReply);
+ $("editPhotoButton").addEventListener("click",()=>chooseContactPhoto(id));
+ $("deleteChatButton").addEventListener("click",deleteConversation);
+ drawMessages();
 }
-function addContact(){
-  const name=prompt("Enter contact name:");
-  if(!name||!name.trim())return;
-  const contact={
-    id:String(Date.now())+Math.random().toString(16).slice(2),
-    name:name.trim(),photo:"",messages:[]
-  };
-  messageContacts.push(contact);
-  saveContacts();
-  renderMessages();
-  if(confirm("Add a profile photo?")){
-    chooseContactPhoto(contact.id);
-  }
+function drawMessages(){
+ const c=contacts.find(x=>x.id===currentContactId);const box=$("chatMessages");if(!c||!box)return;
+ if(!c.messages.length){box.innerHTML=`<div class="chat-empty">No messages yet. Say hello!</div>`;return;}
+ box.innerHTML=c.messages.map(m=>`<div class="chat-bubble ${m.type==="sent"?"sent":"received"}">${safeText(m.text)}</div>`).join("");
 }
-function chooseContactPhoto(id){
-  const picker=document.createElement("input");
-  picker.type="file";
-  picker.accept="image/*";
-  picker.onchange=()=>{
-    const file=picker.files[0];
-    if(!file)return;
-    const reader=new FileReader();
-    reader.onload=()=>{
-      const contact=messageContacts.find(item=>item.id===id);
-      if(!contact)return;
-      contact.photo=reader.result;
-      saveContacts();
-      renderMessages();
-    };
-    reader.readAsDataURL(file);
-  };
-  picker.click();
+function sendMessage(event){
+ event.preventDefault();
+ const input=$("messageInput");const text=input.value.trim();if(!text)return;
+ const c=contacts.find(x=>x.id===currentContactId);if(!c)return;
+ c.messages.push({type:"sent",text});saveContacts();drawMessages();input.value="";
 }
-function openConversation(id){
-  currentContactId=id;
-  const contact=messageContacts.find(item=>item.id===id);
-  if(!contact)return;
-  appContent.innerHTML=`
-    <div class="chat-screen">
-      <div class="chat-heading">
-        <button onclick="renderMessages()">‹ Messages</button>
-        <strong>${escapeMessageText(contact.name)}</strong>
-      </div>
-      <div id="chatMessages" class="chat-messages"></div>
-      <form class="chat-compose" onsubmit="sendMessage(event)">
-        <input id="messageInput" type="text" placeholder="iMessage" autocomplete="off" required>
-        <button type="submit">↑</button>
-      </form>
-      <div class="chat-tools">
-        <button onclick="addReply()">＋ Add Reply</button>
-        <button onclick="chooseContactPhoto('${contact.id}')">Edit Photo</button>
-    
+function addReply(){
+ const text=prompt("Write a simulated reply:");
+ if(!text||!text.trim())return;
+ const c=contacts.find(x=>x.id===currentContactId);if(!c)return;
+ c.messages.push({type:"received",text:text.trim()});saveContacts();drawMessages();
+}
+function deleteConversation(){
+ if(!confirm("Delete this conversation and contact?"))return;
+ contacts=contacts.filter(x=>x.id!==currentContactId);currentContactId=null;saveContacts();renderMessages();
+}
+</script>
+</body>
+</html>
