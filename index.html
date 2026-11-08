@@ -770,7 +770,219 @@ function openApp(name) {
 
   document.getElementById("appPage").classList.add("active");
 }
+/* MESSAGES DATABASE */
+let messageContacts = JSON.parse(
+  localStorage.getItem("iphoneContacts") || "[]"
+);
 
+let currentContactId = null;
+
+function saveContacts() {
+  localStorage.setItem(
+    "iphoneContacts",
+    JSON.stringify(messageContacts)
+  );
+}
+
+function escapeMessageText(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function renderMessages() {
+  const content = document.getElementById("appContent");
+
+  content.innerHTML = `
+    <div class="messages-home">
+      <div class="messages-top">
+        <h2>Messages</h2>
+        <button class="new-chat" onclick="addContact()">+</button>
+      </div>
+
+      <button class="contact-add" onclick="addContact()">
+        + New Message / Add Contact
+      </button>
+
+      <div id="contactList"></div>
+    </div>
+  `;
+
+  const list = document.getElementById("contactList");
+
+  if (messageContacts.length === 0) {
+    list.innerHTML = `
+      <div class="chat-empty">
+        <div style="font-size:45px">💬</div>
+        Your messages will appear here.
+        <p style="margin-top:8px">Tap + to add a contact.</p>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = messageContacts.map(contact => {
+    const last = contact.messages[contact.messages.length - 1];
+
+    return `
+      <div class="contact-row"
+        onclick="openConversation('${contact.id}')">
+        <div class="contact-avatar">
+          ${contact.photo
+            ? `<img src="${contact.photo}">`
+            : escapeMessageText(contact.name.charAt(0).toUpperCase())}
+        </div>
+        <div class="contact-info">
+          <strong>${escapeMessageText(contact.name)}</strong>
+          <small>${last ? escapeMessageText(last.text) : "iMessage"}</small>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function addContact() {
+  const name = prompt("Enter contact name:");
+  if (!name || !name.trim()) return;
+
+  const contact = {
+    id: String(Date.now()) + Math.random(),
+    name: name.trim(),
+    photo: "",
+    messages: []
+  };
+
+  messageContacts.push(contact);
+  saveContacts();
+
+  if (confirm("Do you want to add a profile photo?")) {
+    const picker = document.createElement("input");
+    picker.type = "file";
+    picker.accept = "image/*";
+
+    picker.onchange = () => {
+      const file = picker.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        contact.photo = reader.result;
+        saveContacts();
+        renderMessages();
+      };
+      reader.readAsDataURL(file);
+    };
+
+    picker.click();
+  }
+
+  renderMessages();
+}
+
+function openConversation(id) {
+  currentContactId = id;
+
+  const contact = messageContacts.find(item => item.id === id);
+  if (!contact) return;
+
+  const content = document.getElementById("appContent");
+
+  content.innerHTML = `
+    <div class="chat-screen">
+      <div class="chat-heading">
+        <button onclick="renderMessages()">‹ Messages</button>
+        <strong>${escapeMessageText(contact.name)}</strong>
+      </div>
+
+      <div id="chatMessages" class="chat-messages"></div>
+
+      <form class="chat-compose" onsubmit="sendMessage(event)">
+        <input id="messageInput" type="text"
+          placeholder="iMessage" autocomplete="off" required>
+        <button type="submit">↑</button>
+      </form>
+
+      <button
+        style="margin-top:20px;border:0;background:none;color:#e34b4b"
+        onclick="deleteConversation('${contact.id}')">
+        Delete Conversation
+      </button>
+    </div>
+  `;
+
+  drawConversation();
+}
+
+function drawConversation() {
+  const contact = messageContacts.find(
+    item => item.id === currentContactId
+  );
+
+  const area = document.getElementById("chatMessages");
+  if (!contact || !area) return;
+
+  if (!contact.messages.length) {
+    area.innerHTML = `
+      <div class="chat-empty">
+        This is the beginning of your conversation.
+      </div>
+    `;
+    return;
+  }
+
+  area.innerHTML = contact.messages.map(message => `
+    <div class="chat-bubble ${message.type}">
+      ${escapeMessageText(message.text)}
+      <div class="chat-time">${message.time}</div>
+    </div>
+  `).join("");
+
+  area.scrollTop = area.scrollHeight;
+}
+
+function sendMessage(event) {
+  event.preventDefault();
+
+  const input = document.getElementById("messageInput");
+  const text = input.value.trim();
+
+  if (!text || !currentContactId) return;
+
+  const contact = messageContacts.find(
+    item => item.id === currentContactId
+  );
+
+  if (!contact) return;
+
+  contact.messages.push({
+    text,
+    type: "sent",
+    time: new Date().toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit"
+    })
+  });
+
+  saveContacts();
+  input.value = "";
+  drawConversation();
+}
+
+function deleteConversation(id) {
+  if (!confirm("Delete this contact and conversation?")) return;
+
+  messageContacts = messageContacts.filter(
+    item => item.id !== id
+  );
+
+  saveContacts();
+  currentContactId = null;
+  renderMessages();
+}
 /* BACK HOME */
 function goHome() {
   document.getElementById("appPage").classList.remove("active");
