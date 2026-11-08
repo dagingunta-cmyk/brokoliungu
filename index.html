@@ -8,493 +8,263 @@
 <title>My Virtual iPhone</title>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+  background:#101827;color:white;min-height:100vh
 }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-  background: #101827;
-  color: white;
-  min-height: 100vh;
-}
-
-.phone-screen {
-  width: 100%;
-  min-height: 100vh;
-  position: relative;
-  overflow: hidden;
+.phone-screen{
+  width:100%;min-height:100vh;position:relative;overflow:hidden;
   background:
-    radial-gradient(ellipse at 15% 30%, #7eabd4 0%, transparent 45%),
-    radial-gradient(ellipse at 90% 65%, #456e9d 0%, transparent 50%),
-    linear-gradient(145deg, #152a4a, #527ba4 55%, #182b4c);
-  background-size: cover;
-  background-position: center;
-  transition: background .3s;
+  radial-gradient(ellipse at 15% 30%,#7eabd4 0%,transparent 45%),
+  radial-gradient(ellipse at 90% 65%,#456e9d 0%,transparent 50%),
+  linear-gradient(145deg,#152a4a,#527ba4 55%,#182b4c);
+  background-size:cover;background-position:center
+}
+.status{
+  height:42px;display:flex;justify-content:space-between;
+  align-items:center;padding:0 25px;font-size:14px;
+  font-weight:600;position:relative;z-index:2
+}
+.status-right{display:flex;gap:8px}
+.island{
+  position:absolute;top:9px;left:50%;transform:translateX(-50%);
+  width:105px;height:29px;border-radius:30px;
+  background:#080a0d;z-index:5
+}
+.lock-screen,.passcode-screen,.home-screen{
+  min-height:calc(100vh - 42px);padding:12px 22px 24px;position:relative
+}
+.lock-screen{text-align:center}
+.lock-clock{
+  margin-top:95px;font-size:clamp(65px,18vw,88px);
+  font-weight:300;letter-spacing:-4px
+}
+.lock-date{font-size:17px;margin-top:3px}
+.lock-message{margin-top:35px;font-size:13px;color:#ffffffcc}
+.unlock-button{
+  position:absolute;bottom:95px;left:50%;transform:translateX(-50%);
+  border:1px solid #ffffff88;color:white;background:#ffffff25;
+  padding:12px 25px;border-radius:25px;font-size:14px;
+  backdrop-filter:blur(15px)
+}
+.lock-bottom{
+  position:absolute;bottom:28px;left:0;right:0;
+  display:flex;justify-content:space-around
+}
+.lock-bottom span{
+  background:#ffffff30;width:45px;height:45px;display:grid;
+  place-items:center;border-radius:50%;font-size:20px
+}
+.passcode-screen{text-align:center;padding-top:105px}
+.passcode-screen h2{font-size:22px;font-weight:500}
+.passcode-screen p{margin-top:10px;color:#ffffffbb;font-size:13px}
+.dots{display:flex;justify-content:center;gap:17px;margin:30px 0}
+.dot{width:12px;height:12px;border:1px solid white;border-radius:50%}
+.dot.filled{background:white}
+.keypad{
+  width:260px;margin:0 auto;display:grid;
+  grid-template-columns:repeat(3,1fr);gap:15px
+}
+.key{
+  border:none;width:70px;height:70px;border-radius:50%;
+  background:#ffffff32;color:white;font-size:25px;margin:auto
+}
+.key:active{background:#ffffff70}
+.error{color:#ffd0d0;font-size:13px;min-height:20px}
+.home-screen{display:none}
+.clock-widget{text-align:center;margin-top:48px;margin-bottom:35px}
+.clock{font-size:clamp(58px,16vw,76px);font-weight:300;letter-spacing:-3px}
+.date{font-size:17px;margin-top:5px}
+.app-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:25px 10px;margin-top:10px
+}
+.app{
+  border:none;background:transparent;color:white;font:inherit;
+  display:flex;flex-direction:column;align-items:center;gap:6px
+}
+.app-icon{
+  width:57px;height:57px;border-radius:14px;display:grid;
+  place-items:center;font-size:30px;box-shadow:0 4px 12px #07182d44
+}
+.app-name{font-size:11px;font-weight:500;text-shadow:0 1px 4px #0008}
+.instagram{background:linear-gradient(35deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)}
+.gallery{background:white;color:#e94b77}
+.phone{background:#28c76f}
+.notes{background:linear-gradient(#fff 0 28%,#f4e5a4 28% 100%);color:#444}
+.camera{background:#b7c2d0}
+.calendar{background:white;color:#e64a4a}
+.settings{background:#929ba5}
+.safari{background:#e9f6ff;color:#1685e9}
+.messages{background:#20c76a}
+.music{background:#f9d5df;color:#e83e78}
+.mail{background:#e8f4ff;color:#2588e9}
+.search-bar{
+  width:175px;margin:30px auto 22px;padding:9px;
+  border-radius:20px;background:#ffffff35;text-align:center;font-size:12px
+}
+.dock{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+  padding:13px 10px;border-radius:26px;background:#ffffff30;
+  backdrop-filter:blur(20px);margin-top:5px
+}
+.dock .app-name{display:none}
+.dock .app-icon{width:54px;height:54px}
+.app-page{
+  position:absolute;inset:0;z-index:10;background:#f4f5f9;
+  color:#222;display:none;padding:55px 18px 45px;overflow-y:auto
+}
+.app-page.active{display:block}
+.app-header{
+  display:flex;align-items:center;gap:15px;font-size:21px;
+  font-weight:700;margin-bottom:25px
+}
+.back-button{
+  border:none;background:#e5e9f0;color:#2879d9;
+  padding:9px 14px;border-radius:12px;font-size:14px
+}
+.settings-content,.placeholder-content{
+  text-align:center;padding-top:45px;color:#777;line-height:1.8
+}
+.settings-content h3{color:#222;margin-bottom:10px}
+.setting-button,.contact-add{
+  display:block;width:100%;margin-top:12px;padding:14px;
+  border:none;border-radius:12px;background:#e5edf8;
+  color:#2679d4;font-size:14px
+}
+.gallery-tools{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.upload-button,.action-button{
+  border:none;background:#2585e9;color:white;
+  padding:12px 15px;border-radius:12px;font-size:13px
+}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.gallery-photo{
+  width:100%;aspect-ratio:1;object-fit:cover;
+  background:#dce5ee;border-radius:3px
+}
+.empty-gallery{
+  grid-column:1/-1;text-align:center;color:#888;
+  padding:65px 15px;line-height:1.8
+}
+.photo-viewer{
+  position:fixed;inset:0;z-index:30;background:#111;color:white;
+  display:none;flex-direction:column;justify-content:center;
+  align-items:center;padding:20px
+}
+.photo-viewer img{max-width:100%;max-height:65vh;object-fit:contain}
+.viewer-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:22px}
+.viewer-close{
+  background:#ffffff25;color:white;border:none;
+  padding:12px 18px;border-radius:12px
+}
+.home-indicator{
+  position:absolute;bottom:9px;left:50%;transform:translateX(-50%);
+  width:110px;height:5px;border-radius:10px;background:white;z-index:20
 }
 
-.status {
-  height: 42px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 25px;
-  font-size: 14px;
-  font-weight: 600;
-  position: relative;
-  z-index: 2;
+/* MESSAGES */
+.messages-home{color:#111}
+.messages-top{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:20px
 }
-
-.status-right {
-  display: flex;
-  gap: 8px;
+.messages-top h2{font-size:30px;font-weight:700}
+.new-chat{
+  border:none;background:#1685ed;color:white;width:38px;height:38px;
+  border-radius:50%;font-size:25px
 }
-
-.island {
-  position: absolute;
-  top: 9px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 105px;
-  height: 29px;
-  border-radius: 30px;
-  background: #080a0d;
-  z-index: 5;
+.contact-add{margin-bottom:18px}
+.contact-row{
+  display:flex;align-items:center;gap:12px;padding:13px 4px;
+  border-bottom:1px solid #e8e8e8
 }
-
-.lock-screen,
-.passcode-screen,
-.home-screen {
-  min-height: 100vh;
-  padding: 12px 22px 24px;
-  position: relative;
+.contact-avatar{
+  width:48px;height:48px;border-radius:50%;background:#dce8f6;
+  display:grid;place-items:center;color:#527ba4;font-size:20px;
+  font-weight:600;flex-shrink:0;overflow:hidden
 }
-
-.lock-screen {
-  text-align: center;
+.contact-avatar img{width:100%;height:100%;object-fit:cover}
+.contact-info{flex:1;min-width:0}
+.contact-info strong{display:block;font-size:15px;margin-bottom:5px}
+.contact-info small{color:#888;font-size:12px}
+.chat-heading{
+  display:flex;align-items:center;gap:10px;padding-bottom:15px;
+  border-bottom:1px solid #eee;margin-bottom:15px
 }
-
-.lock-clock {
-  margin-top: 95px;
-  font-size: clamp(65px, 18vw, 88px);
-  font-weight: 300;
-  letter-spacing: -4px;
+.chat-heading button{
+  border:none;background:none;color:#1685ed;font-size:16px
 }
-
-.lock-date {
-  font-size: 17px;
-  margin-top: 3px;
+.chat-heading strong{font-size:16px}
+.chat-messages{
+  display:flex;flex-direction:column;gap:10px;
+  min-height:300px;padding:10px 0 20px
 }
-
-.lock-message {
-  margin-top: 35px;
-  font-size: 13px;
-  color: #ffffffcc;
+.chat-bubble{
+  max-width:78%;padding:10px 14px;border-radius:19px;
+  font-size:14px;line-height:1.45;overflow-wrap:anywhere
 }
-
-.unlock-button {
-  position: absolute;
-  bottom: 95px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 1px solid #ffffff88;
-  color: white;
-  background: #ffffff25;
-  padding: 12px 25px;
-  border-radius: 25px;
-  font-size: 14px;
-  backdrop-filter: blur(15px);
+.chat-bubble.sent{
+  align-self:flex-end;background:#1685ed;color:white;border-bottom-right-radius:5px
 }
-
-.lock-bottom {
-  position: absolute;
-  bottom: 28px;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-around;
+.chat-bubble.received{
+  align-self:flex-start;background:#e9e9eb;color:#111;border-bottom-left-radius:5px
 }
-
-.lock-bottom span {
-  background: #ffffff30;
-  width: 45px;
-  height: 45px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  font-size: 20px;
+.chat-time{font-size:10px;color:#999;margin-top:4px;text-align:right}
+.chat-compose{
+  display:flex;align-items:center;gap:8px;
+  position:sticky;bottom:-45px;background:#f4f5f9;padding:12px 0
 }
-
-.home-indicator {
-  position: absolute;
-  bottom: 9px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 110px;
-  height: 5px;
-  border-radius: 10px;
-  background: white;
-  z-index: 20;
+.chat-compose input{
+  flex:1;min-width:0;border:1px solid #ddd;border-radius:22px;
+  padding:12px 15px;font-size:14px;outline:none
 }
-
-.passcode-screen {
-  text-align: center;
-  padding-top: 105px;
+.chat-compose button{
+  border:none;background:#1685ed;color:white;width:40px;height:40px;
+  border-radius:50%;font-size:19px
 }
-
-.passcode-screen h2 {
-  font-size: 22px;
-  font-weight: 500;
+.chat-empty{text-align:center;color:#999;padding:65px 15px;font-size:13px}
+.chat-tools{display:flex;gap:10px;margin-top:18px}
+.chat-tools button{
+  flex:1;border:0;border-radius:12px;padding:11px;
+  background:#e9f2ff;color:#1685ed;font-size:12px
 }
-
-.passcode-screen p {
-  margin-top: 10px;
-  color: #ffffffbb;
-  font-size: 13px;
+.delete-button{
+  margin-top:20px;border:0;background:none;color:#e34b4b;padding:10px
 }
-
-.dots {
-  display: flex;
-  justify-content: center;
-  gap: 17px;
-  margin: 30px 0;
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  border: 1px solid white;
-  border-radius: 50%;
-}
-
-.dot.filled {
-  background: white;
-}
-
-.keypad {
-  width: 260px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-}
-
-.key {
-  border: none;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: #ffffff32;
-  color: white;
-  font-size: 25px;
-  margin: auto;
-}
-
-.key:active {
-  background: #ffffff70;
-}
-
-.error {
-  color: #ffd0d0;
-  font-size: 13px;
-  min-height: 20px;
-}
-
-.home-screen {
-  display: none;
-}
-
-.clock-widget {
-  margin-top: 48px;
-  margin-bottom: 35px;
-  text-align: center;
-}
-
-.clock {
-  font-size: clamp(58px, 16vw, 76px);
-  font-weight: 300;
-  letter-spacing: -3px;
-}
-
-.date {
-  font-size: 17px;
-  margin-top: 5px;
-}
-
-.app-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 25px 10px;
-  margin-top: 10px;
-}
-
-.app {
-  border: none;
-  background: transparent;
-  color: white;
-  font: inherit;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
-
-.app-icon {
-  width: 57px;
-  height: 57px;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  font-size: 30px;
-  box-shadow: 0 4px 12px #07182d44;
-}
-
-.app-name {
-  font-size: 11px;
-  font-weight: 500;
-  text-shadow: 0 1px 4px #0008;
-}
-
-.whatsapp { background: #20c76a; }
-.instagram {
-  background: linear-gradient(35deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
-}
-.gallery { background: white; color: #e94b77; }
-.phone { background: #28c76f; }
-.notes {
-  background: linear-gradient(#fff 0 28%,#f4e5a4 28% 100%);
-  color: #444;
-}
-.camera { background: #b7c2d0; }
-.calendar { background: white; color: #e64a4a; }
-.settings { background: #929ba5; }
-.safari { background: #e9f6ff; color: #1685e9; }
-.messages { background: #20c76a; }
-.music { background: #f9d5df; color: #e83e78; }
-.mail { background: #e8f4ff; color: #2588e9; }
-
-.search-bar {
-  width: 175px;
-  margin: 30px auto 22px;
-  padding: 9px;
-  border-radius: 20px;
-  background: #ffffff35;
-  text-align: center;
-  font-size: 12px;
-}
-
-.dock {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  padding: 13px 10px;
-  border-radius: 26px;
-  background: #ffffff30;
-  backdrop-filter: blur(20px);
-  margin-top: 5px;
-}
-
-.dock .app-name {
-  display: none;
-}
-
-.dock .app-icon {
-  width: 54px;
-  height: 54px;
-}
-
-.app-page {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  background: #f4f5f9;
-  color: #222;
-  display: none;
-  padding: 55px 18px 45px;
-  overflow-y: auto;
-}
-
-.app-page.active {
-  display: block;
-}
-
-.app-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  font-size: 21px;
-  font-weight: 700;
-  margin-bottom: 25px;
-}
-
-.back-button {
-  border: none;
-  background: #e5e9f0;
-  color: #2879d9;
-  padding: 9px 14px;
-  border-radius: 12px;
-  font-size: 14px;
-}
-
-.gallery-tools {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
-.upload-button,
-.action-button {
-  border: none;
-  background: #2585e9;
-  color: white;
-  padding: 12px 15px;
-  border-radius: 12px;
-  font-size: 13px;
-}
-
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
-}
-
-.gallery-photo {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  background: #dce5ee;
-  border-radius: 3px;
-}
-
-.empty-gallery {
-  grid-column: 1 / -1;
-  text-align: center;
-  color: #888;
-  padding: 65px 15px;
-  line-height: 1.8;
-}
-
-.photo-viewer {
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  background: #111;
-  color: white;
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-.photo-viewer img {
-  max-width: 100%;
-  max-height: 65vh;
-  object-fit: contain;
-}
-
-.viewer-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 22px;
-}
-
-.viewer-close {
-  background: #ffffff25;
-  color: white;
-  border: none;
-  padding: 12px 18px;
-  border-radius: 12px;
-}
-
-.settings-content,
-.placeholder-content {
-  text-align: center;
-  padding-top: 45px;
-  color: #777;
-  line-height: 1.8;
-}
-
-.settings-content h3 {
-  color: #222;
-  margin-bottom: 10px;
-}
-
-.setting-button {
-  display: block;
-  width: 100%;
-  margin-top: 12px;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  background: #e5edf8;
-  color: #2679d4;
-  font-size: 14px;
-}
-
-@media (min-width: 600px) {
-  .phone-screen {
-    width: 390px;
-    min-height: 844px;
-    margin: 25px auto;
-    border: 5px solid #222;
-    border-radius: 42px;
-    box-shadow: 0 15px 50px #0007;
+@media(min-width:600px){
+  .phone-screen{
+    width:390px;min-height:844px;margin:25px auto;
+    border:5px solid #222;border-radius:42px;box-shadow:0 15px 50px #0007
   }
 }
 </style>
 </head>
 
 <body>
-
 <div class="phone-screen" id="phone">
-
   <div class="island"></div>
 
   <div class="status">
     <span id="statusTime">09:41</span>
-    <div class="status-right">
-      <span>●●●</span>
-      <span>Wi-Fi</span>
-      <span>▰</span>
-    </div>
+    <div class="status-right"><span>●●●</span><span>Wi-Fi</span><span>▰</span></div>
   </div>
 
-  <!-- LOCK SCREEN -->
   <section class="lock-screen" id="lockScreen">
     <div class="lock-clock" id="lockClock">09:41</div>
     <div class="lock-date" id="lockDate"></div>
     <div class="lock-message">A beautiful day begins with you.</div>
-
-    <button class="unlock-button" onclick="showPasscode()">
-      Tap to Unlock
-    </button>
-
-    <div class="lock-bottom">
-      <span>🔦</span>
-      <span>📷</span>
-    </div>
+    <button class="unlock-button" onclick="showPasscode()">Tap to Unlock</button>
+    <div class="lock-bottom"><span>🔦</span><span>📷</span></div>
   </section>
 
-  <!-- PASSCODE -->
   <section class="passcode-screen" id="passcodeScreen" style="display:none">
     <h2>Enter Passcode</h2>
     <p>Enter your passcode to unlock this iPhone</p>
-
-    <div class="dots" id="dots">
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
+    <div class="dots">
+      <span class="dot"></span><span class="dot"></span>
+      <span class="dot"></span><span class="dot"></span>
     </div>
-
     <div class="error" id="passcodeError"></div>
-
     <div class="keypad">
       <button class="key" onclick="pressKey('1')">1</button>
       <button class="key" onclick="pressKey('2')">2</button>
@@ -511,22 +281,16 @@ body {
     </div>
   </section>
 
-  <!-- HOME SCREEN -->
   <section class="home-screen" id="homeScreen">
-
     <div class="clock-widget">
       <div class="clock" id="homeClock">09:41</div>
       <div class="date" id="homeDate"></div>
     </div>
-
     <div class="app-grid" id="appGrid"></div>
-
     <div class="search-bar">⌕ &nbsp; Search</div>
-
     <div class="dock" id="dock"></div>
   </section>
 
-  <!-- APP PAGE -->
   <section class="app-page" id="appPage">
     <div class="app-header">
       <button class="back-button" onclick="goHome()">‹ Home</button>
@@ -536,28 +300,20 @@ body {
   </section>
 
   <div class="home-indicator"></div>
-
 </div>
 
-<!-- PHOTO VIEWER -->
 <div class="photo-viewer" id="photoViewer">
   <img id="viewerImage" alt="Selected photo">
   <div class="viewer-actions">
-    <button class="action-button" onclick="setWallpaper()">
-      Set as Wallpaper
-    </button>
-    <button class="viewer-close" onclick="closeViewer()">
-      Close
-    </button>
+    <button class="action-button" onclick="setWallpaper()">Set as Wallpaper</button>
+    <button class="viewer-close" onclick="closeViewer()">Close</button>
   </div>
 </div>
 
 <script>
-/* CONFIGURATION */
+/* CONFIG */
 const CORRECT_PASSCODE = "2610";
-
 const apps = [
-  
   {name:"Instagram",icon:"◎",color:"instagram"},
   {name:"Gallery",icon:"🌸",color:"gallery"},
   {name:"Phone",icon:"☎",color:"phone"},
@@ -574,543 +330,271 @@ const apps = [
 let enteredCode = "";
 let photos = [];
 let selectedPhoto = null;
-
-/* DATABASE: STORE PHOTOS AND WALLPAPER */
-let db;
-
-function openDatabase() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open("VirtualIphoneDB", 1);
-
-    request.onupgradeneeded = function(event) {
-      const database = event.target.result;
-
-      if (!database.objectStoreNames.contains("photos")) {
-        database.createObjectStore("photos", {keyPath:"id"});
-      }
-
-      if (!database.objectStoreNames.contains("settings")) {
-        database.createObjectStore("settings", {keyPath:"key"});
-      }
-    };
-
-    request.onsuccess = function(event) {
-      db = event.target.result;
-      resolve(db);
-    };
-
-    request.onerror = function() {
-      reject(request.error);
-    };
-  });
-}
-
-function savePhoto(photo) {
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction("photos", "readwrite");
-    transaction.objectStore("photos").put(photo);
-    transaction.oncomplete = resolve;
-    transaction.onerror = () => reject(transaction.error);
-  });
-}
-
-function getPhotos() {
-  return new Promise((resolve, reject) => {
-    const request = db.transaction("photos")
-      .objectStore("photos").getAll();
-
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
-}
-
-function saveSetting(key, value) {
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction("settings", "readwrite");
-    transaction.objectStore("settings").put({key, value});
-    transaction.oncomplete = resolve;
-    transaction.onerror = () => reject(transaction.error);
-  });
-}
-
-function getSetting(key) {
-  return new Promise((resolve, reject) => {
-    const request = db.transaction("settings")
-      .objectStore("settings").get(key);
-
-    request.onsuccess = () => resolve(request.result?.value || null);
-    request.onerror = () => reject(request.error);
-  });
-}
+let wallpaperData = localStorage.getItem("iphoneWallpaper") || "";
 
 /* CLOCK */
-function updateClock() {
+function updateClock(){
   const now = new Date();
-
-  const time = now.toLocaleTimeString("id-ID", {
-    hour:"2-digit",
-    minute:"2-digit",
-    hour12:false
+  const time = now.toLocaleTimeString("id-ID",{
+    hour:"2-digit",minute:"2-digit",hour12:false
   });
-
-  const date = now.toLocaleDateString("en-US", {
-    weekday:"long",
-    month:"long",
-    day:"numeric"
+  const date = now.toLocaleDateString("en-US",{
+    weekday:"long",month:"long",day:"numeric"
   });
-
-  document.getElementById("statusTime").textContent = time;
-  document.getElementById("lockClock").textContent = time;
-  document.getElementById("homeClock").textContent = time;
-  document.getElementById("lockDate").textContent = date;
-  document.getElementById("homeDate").textContent = date;
+  ["statusTime","lockClock","homeClock"].forEach(id=>{
+    document.getElementById(id).textContent = time;
+  });
+  ["lockDate","homeDate"].forEach(id=>{
+    document.getElementById(id).textContent = date;
+  });
 }
-
 updateClock();
-setInterval(updateClock, 1000);
+setInterval(updateClock,1000);
 
 /* PASSCODE */
-function showPasscode() {
-  document.getElementById("lockScreen").style.display = "none";
-  document.getElementById("passcodeScreen").style.display = "block";
-  enteredCode = "";
+function showPasscode(){
+  lockScreen.style.display="none";
+  passcodeScreen.style.display="block";
+  enteredCode="";
   updateDots();
 }
-
-function cancelPasscode() {
-  document.getElementById("passcodeScreen").style.display = "none";
-  document.getElementById("lockScreen").style.display = "block";
-  enteredCode = "";
+function cancelPasscode(){
+  passcodeScreen.style.display="none";
+  lockScreen.style.display="block";
+  enteredCode="";
   updateDots();
 }
-
-function pressKey(number) {
-  if (enteredCode.length >= 4) return;
-
-  enteredCode += number;
+function pressKey(number){
+  if(enteredCode.length>=4)return;
+  enteredCode+=number;
   updateDots();
-
-  if (enteredCode.length === 4) {
-    if (enteredCode === CORRECT_PASSCODE) {
-      document.getElementById("passcodeScreen").style.display = "none";
-      document.getElementById("homeScreen").style.display = "block";
-      document.getElementById("passcodeError").textContent = "";
-    } else {
-      document.getElementById("passcodeError").textContent = "Incorrect passcode";
-      setTimeout(() => {
-        enteredCode = "";
+  if(enteredCode.length===4){
+    if(enteredCode===CORRECT_PASSCODE){
+      passcodeScreen.style.display="none";
+      homeScreen.style.display="block";
+      passcodeError.textContent="";
+    }else{
+      passcodeError.textContent="Incorrect passcode";
+      setTimeout(()=>{
+        enteredCode="";
         updateDots();
-        document.getElementById("passcodeError").textContent = "";
-      }, 700);
+        passcodeError.textContent="";
+      },700);
     }
   }
 }
-
-function clearPasscode() {
-  enteredCode = enteredCode.slice(0, -1);
+function clearPasscode(){
+  enteredCode=enteredCode.slice(0,-1);
   updateDots();
 }
-
-function updateDots() {
-  document.querySelectorAll(".dot").forEach((dot, index) => {
-    dot.classList.toggle("filled", index < enteredCode.length);
+function updateDots(){
+  document.querySelectorAll(".dot").forEach((dot,index)=>{
+    dot.classList.toggle("filled",index<enteredCode.length);
   });
 }
 
-/* APPLICATION ICONS */
-function createApp(app) {
-  return `
-    <button class="app" onclick="openApp('${app.name}')">
-      <div class="app-icon ${app.color}">${app.icon}</div>
-      <span class="app-name">${app.name}</span>
-    </button>
-  `;
+/* HOME APPS */
+function createApp(app){
+  return `<button class="app" onclick="openApp('${app.name}')">
+    <div class="app-icon ${app.color}">${app.icon}</div>
+    <span class="app-name">${app.name}</span>
+  </button>`;
 }
+appGrid.innerHTML=apps.map(createApp).join("");
+const dockApps=[apps[2],apps[0],apps[8],apps[9]];
+dock.innerHTML=dockApps.map(createApp).join("");
 
-document.getElementById("appGrid").innerHTML =
-  apps.map(createApp).join("");
+/* OPEN APP */
+function openApp(name){
+  pageTitle.textContent=name;
+  const content=document.getElementById("appContent");
 
-const dockApps = [apps[3], apps[0], apps[8], apps[9]];
-
-document.getElementById("dock").innerHTML =
-  dockApps.map(createApp).join("");
-
-/* OPEN APPLICATION */
-function openApp(name) {
-  document.getElementById("pageTitle").textContent = name;
-
-  const content = document.getElementById("appContent");
-
-  if (name === "Gallery") {
+  if(name==="Gallery"){
     renderGallery();
-  } else if (name === "Settings") {
-    content.innerHTML = `
+  }else if(name==="Messages"){
+    renderMessages();
+  }else if(name==="Settings"){
+    content.innerHTML=`
       <div class="settings-content">
         <h3>Settings</h3>
         <p>Customize your virtual iPhone.</p>
-        <button class="setting-button" onclick="goHome()">
-          Back to Home Screen
-        </button>
-        <p style="margin-top:25px;font-size:12px">
-          Virtual iPhone · iOS-inspired simulation
-        </p>
-      </div>
-    `;
-  } else {
-    const app = apps.find(item => item.name === name);
-
-    content.innerHTML = `
+        <button class="setting-button" onclick="resetWallpaper()">Reset Wallpaper</button>
+        <p style="margin-top:25px;font-size:12px">Virtual iPhone · iOS-inspired simulation</p>
+      </div>`;
+  }else{
+    const app=apps.find(item=>item.name===name);
+    content.innerHTML=`
       <div class="placeholder-content">
         <div style="font-size:65px">${app.icon}</div>
         <h2 style="color:#333;margin:12px">${name}</h2>
         <p>This application is part of your virtual iPhone.</p>
-      </div>
-    `;
+      </div>`;
   }
-
-  document.getElementById("appPage").classList.add("active");
+  appPage.classList.add("active");
 }
+function goHome(){
+  appPage.classList.remove("active");
+  closeViewer();
+}
+
+/* GALLERY */
+function renderGallery(){
+  appContent.innerHTML=`
+    <div class="gallery-tools">
+      <button class="upload-button" onclick="document.getElementById('photoInput').click()">＋ Add Photos</button>
+      <input id="photoInput" type="file" accept="image/*" multiple hidden onchange="uploadPhotos(event)">
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>`;
+  drawGallery();
+}
+function drawGallery(){
+  const grid=document.getElementById("galleryGrid");
+  if(!grid)return;
+  if(!photos.length){
+    grid.innerHTML=`<div class="empty-gallery">🌸<br>Your gallery is empty.<br>Add your first photo.</div>`;
+    return;
+  }
+  grid.innerHTML=photos.map((photo,index)=>`
+    <img class="gallery-photo" src="${photo.data}" alt="Photo"
+    onclick="viewPhoto(${index})">`).join("");
+}
+function uploadPhotos(event){
+  const files=Array.from(event.target.files||[]);
+  files.forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=()=>{
+      photos.push({data:reader.result});
+      localStorage.setItem("iphonePhotos",JSON.stringify(photos));
+      drawGallery();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function viewPhoto(index){
+  selectedPhoto=photos[index]?.data||null;
+  if(!selectedPhoto)return;
+  viewerImage.src=selectedPhoto;
+  photoViewer.style.display="flex";
+}
+function closeViewer(){
+  photoViewer.style.display="none";
+  viewerImage.src="";
+}
+function setWallpaper(){
+  if(!selectedPhoto)return;
+  wallpaperData=selectedPhoto;
+  localStorage.setItem("iphoneWallpaper",wallpaperData);
+  applyWallpaper();
+  closeViewer();
+  alert("Wallpaper updated!");
+}
+function applyWallpaper(){
+  if(wallpaperData){
+    phone.style.backgroundImage=`url("${wallpaperData}")`;
+    phone.style.backgroundSize="cover";
+    phone.style.backgroundPosition="center";
+  }
+}
+function resetWallpaper(){
+  localStorage.removeItem("iphoneWallpaper");
+  wallpaperData="";
+  phone.style.backgroundImage="";
+  alert("Wallpaper reset.");
+}
+
 /* MESSAGES DATABASE */
-let messageContacts = JSON.parse(
-  localStorage.getItem("iphoneContacts") || "[]"
-);
+let messageContacts=JSON.parse(localStorage.getItem("iphoneContacts")||"[]");
+let currentContactId=null;
 
-let currentContactId = null;
-
-function saveContacts() {
-  localStorage.setItem(
-    "iphoneContacts",
-    JSON.stringify(messageContacts)
-  );
+function saveContacts(){
+  localStorage.setItem("iphoneContacts",JSON.stringify(messageContacts));
 }
-
-function escapeMessageText(value) {
-  return String(value).replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
+function escapeMessageText(value){
+  return String(value).replace(/[&<>"']/g,char=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   })[char]);
 }
-
-function renderMessages() {
-  const content = document.getElementById("appContent");
-
-  content.innerHTML = `
+function renderMessages(){
+  appContent.innerHTML=`
     <div class="messages-home">
       <div class="messages-top">
         <h2>Messages</h2>
         <button class="new-chat" onclick="addContact()">+</button>
       </div>
-
-      <button class="contact-add" onclick="addContact()">
-        + New Message / Add Contact
-      </button>
-
+      <button class="contact-add" onclick="addContact()">＋ New Message / Add Contact</button>
       <div id="contactList"></div>
-    </div>
-  `;
-
-  const list = document.getElementById("contactList");
-
-  if (messageContacts.length === 0) {
-    list.innerHTML = `
-      <div class="chat-empty">
-        <div style="font-size:45px">💬</div>
-        Your messages will appear here.
-        <p style="margin-top:8px">Tap + to add a contact.</p>
-      </div>
-    `;
+    </div>`;
+  const list=document.getElementById("contactList");
+  if(!messageContacts.length){
+    list.innerHTML=`<div class="chat-empty">
+      <div style="font-size:45px">💬</div>
+      Your messages will appear here.
+      <p style="margin-top:8px">Tap + to add a contact.</p>
+    </div>`;
     return;
   }
-
-  list.innerHTML = messageContacts.map(contact => {
-    const last = contact.messages[contact.messages.length - 1];
-
-    return `
-      <div class="contact-row"
-        onclick="openConversation('${contact.id}')">
-        <div class="contact-avatar">
-          ${contact.photo
-            ? `<img src="${contact.photo}">`
-            : escapeMessageText(contact.name.charAt(0).toUpperCase())}
-        </div>
-        <div class="contact-info">
-          <strong>${escapeMessageText(contact.name)}</strong>
-          <small>${last ? escapeMessageText(last.text) : "iMessage"}</small>
-        </div>
+  list.innerHTML=messageContacts.map(contact=>{
+    const last=contact.messages[contact.messages.length-1];
+    return `<div class="contact-row" onclick="openConversation('${contact.id}')">
+      <div class="contact-avatar">
+        ${contact.photo?`<img src="${contact.photo}" alt="">`:escapeMessageText(contact.name.charAt(0).toUpperCase())}
       </div>
-    `;
+      <div class="contact-info">
+        <strong>${escapeMessageText(contact.name)}</strong>
+        <small>${last?escapeMessageText(last.text):"iMessage"}</small>
+      </div>
+    </div>`;
   }).join("");
 }
-
-function addContact() {
-  const name = prompt("Enter contact name:");
-  if (!name || !name.trim()) return;
-
-  const contact = {
-    id: String(Date.now()) + Math.random(),
-    name: name.trim(),
-    photo: "",
-    messages: []
+function addContact(){
+  const name=prompt("Enter contact name:");
+  if(!name||!name.trim())return;
+  const contact={
+    id:String(Date.now())+Math.random().toString(16).slice(2),
+    name:name.trim(),photo:"",messages:[]
   };
-
   messageContacts.push(contact);
   saveContacts();
-
-  if (confirm("Do you want to add a profile photo?")) {
-    const picker = document.createElement("input");
-    picker.type = "file";
-    picker.accept = "image/*";
-
-    picker.onchange = () => {
-      const file = picker.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        contact.photo = reader.result;
-        saveContacts();
-        renderMessages();
-      };
-      reader.readAsDataURL(file);
-    };
-
-    picker.click();
-  }
-
   renderMessages();
+  if(confirm("Add a profile photo?")){
+    chooseContactPhoto(contact.id);
+  }
 }
-
-function openConversation(id) {
-  currentContactId = id;
-
-  const contact = messageContacts.find(item => item.id === id);
-  if (!contact) return;
-
-  const content = document.getElementById("appContent");
-
-  content.innerHTML = `
+function chooseContactPhoto(id){
+  const picker=document.createElement("input");
+  picker.type="file";
+  picker.accept="image/*";
+  picker.onchange=()=>{
+    const file=picker.files[0];
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const contact=messageContacts.find(item=>item.id===id);
+      if(!contact)return;
+      contact.photo=reader.result;
+      saveContacts();
+      renderMessages();
+    };
+    reader.readAsDataURL(file);
+  };
+  picker.click();
+}
+function openConversation(id){
+  currentContactId=id;
+  const contact=messageContacts.find(item=>item.id===id);
+  if(!contact)return;
+  appContent.innerHTML=`
     <div class="chat-screen">
       <div class="chat-heading">
         <button onclick="renderMessages()">‹ Messages</button>
         <strong>${escapeMessageText(contact.name)}</strong>
       </div>
-
       <div id="chatMessages" class="chat-messages"></div>
-
       <form class="chat-compose" onsubmit="sendMessage(event)">
-        <input id="messageInput" type="text"
-          placeholder="iMessage" autocomplete="off" required>
+        <input id="messageInput" type="text" placeholder="iMessage" autocomplete="off" required>
         <button type="submit">↑</button>
       </form>
-
-      <button
-        style="margin-top:20px;border:0;background:none;color:#e34b4b"
-        onclick="deleteConversation('${contact.id}')">
-        Delete Conversation
-      </button>
-    </div>
-  `;
-
-  drawConversation();
-}
-
-function drawConversation() {
-  const contact = messageContacts.find(
-    item => item.id === currentContactId
-  );
-
-  const area = document.getElementById("chatMessages");
-  if (!contact || !area) return;
-
-  if (!contact.messages.length) {
-    area.innerHTML = `
-      <div class="chat-empty">
-        This is the beginning of your conversation.
-      </div>
-    `;
-    return;
-  }
-
-  area.innerHTML = contact.messages.map(message => `
-    <div class="chat-bubble ${message.type}">
-      ${escapeMessageText(message.text)}
-      <div class="chat-time">${message.time}</div>
-    </div>
-  `).join("");
-
-  area.scrollTop = area.scrollHeight;
-}
-
-function sendMessage(event) {
-  event.preventDefault();
-
-  const input = document.getElementById("messageInput");
-  const text = input.value.trim();
-
-  if (!text || !currentContactId) return;
-
-  const contact = messageContacts.find(
-    item => item.id === currentContactId
-  );
-
-  if (!contact) return;
-
-  contact.messages.push({
-    text,
-    type: "sent",
-    time: new Date().toLocaleTimeString("id-ID", {
-      hour: "2-digit",
-      minute: "2-digit"
-    })
-  });
-
-  saveContacts();
-  input.value = "";
-  drawConversation();
-}
-
-function deleteConversation(id) {
-  if (!confirm("Delete this contact and conversation?")) return;
-
-  messageContacts = messageContacts.filter(
-    item => item.id !== id
-  );
-
-  saveContacts();
-  currentContactId = null;
-  renderMessages();
-}
-/* BACK HOME */
-function goHome() {
-  document.getElementById("appPage").classList.remove("active");
-  closeViewer();
-}
-
-/* GALLERY */
-function renderGallery() {
-  const content = document.getElementById("appContent");
-
-  content.innerHTML = `
-    <div class="gallery-tools">
-      <label class="upload-button">
-        + Add Photos
-        <input type="file" id="photoUpload" accept="image/*" multiple hidden
-          onchange="uploadPhotos(event)">
-      </label>
-    </div>
-
-    <div class="gallery-grid" id="galleryGrid"></div>
-  `;
-
-  drawPhotos();
-}
-
-function drawPhotos() {
-  const grid = document.getElementById("galleryGrid");
-  if (!grid) return;
-
-  if (photos.length === 0) {
-    grid.innerHTML = `
-      <div class="empty-gallery">
-        <div style="font-size:45px">🌸</div>
-        <strong>No Photos Yet</strong>
-        <p>Your memories will appear here.</p>
-      </div>
-    `;
-    return;
-  }
-
-  grid.innerHTML = photos.map((photo, index) => `
-    <img
-      class="gallery-photo"
-      src="${photo.data}"
-      alt="Photo ${index + 1}"
-      onclick="openPhoto(${index})">
-  `).join("");
-}
-
-async function uploadPhotos(event) {
-  const files = Array.from(event.target.files || []);
-
-  for (const file of files) {
-    if (!file.type.startsWith("image/")) continue;
-
-    const data = await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-
-    const photo = {
-      id: Date.now() + Math.random(),
-      name: file.name,
-      data
-    };
-
-    await savePhoto(photo);
-    photos.push(photo);
-  }
-
-  drawPhotos();
-  event.target.value = "";
-}
-
-/* OPEN PHOTO */
-function openPhoto(index) {
-  selectedPhoto = photos[index];
-
-  document.getElementById("viewerImage").src = selectedPhoto.data;
-  document.getElementById("photoViewer").style.display = "flex";
-}
-
-function closeViewer() {
-  document.getElementById("photoViewer").style.display = "none";
-}
-
-/* SET WALLPAPER */
-async function setWallpaper() {
-  if (!selectedPhoto) return;
-
-  try {
-    await saveSetting("wallpaper", selectedPhoto.data);
-
-    document.getElementById("phone").style.backgroundImage =
-      `url("${selectedPhoto.data}")`;
-
-    closeViewer();
-    alert("Wallpaper berhasil dipasang!");
-  } catch (error) {
-    alert("Wallpaper gagal disimpan. Coba pilih foto yang ukurannya lebih kecil.");
-  }
-}
-
-/* INITIALIZE */
-async function initialize() {
-  try {
-    await openDatabase();
-
-    photos = await getPhotos();
-
-    const wallpaper = await getSetting("wallpaper");
-
-    if (wallpaper) {
-      document.getElementById("phone").style.backgroundImage =
-        `url("${wallpaper}")`;
-    }
-  } catch (error) {
-    console.error("Database error:", error);
-  }
-}
-
-initialize();
-</script>
-
-</body>
-  </html>
-
-
+      <div class="chat-tools">
+        <button onclick="addReply()">＋ Add Reply</button>
+        <button onclick="chooseContactPhoto('${contact.id}')">Edit Photo</button>
     
